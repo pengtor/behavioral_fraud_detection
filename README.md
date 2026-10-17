@@ -81,4 +81,33 @@ Labeled rows were split 80/20 (stratified) for validation.
 
 ---
 
+## Sequence model: GRU (`notebooks/sequence.ipynb`)
 
+**Goal:** test whether a model that reads each user's raw transaction history can find patterns the built features missed.
+
+**Setup.** For every transaction, the input is the user's last 20 transactions *(including the current one)*, oldest first. Each step has 9 values:
+
+| Input | Notes |
+|---|---|
+| `amount`, time gap, `amount_ratio` | log-transformed, then standardized |
+| `channel` | 0/1 |
+| `is_first_txn`, `is_new_device`, `is_new_country`, `is_new_merchant` | 0/1 flags |
+| `present` | 1 for a transaction, 0 for padding |
+
+Users with fewer than 20 past transactions are padded with zeros at the start; the `present` flag lets the model tell padding from real data. Validation uses the exact same rows as the baseline notebook. 
+
+**Model.** A GRU (32 hidden units) reads the sequence step by step, and a linear layer turns its final state into a fraud score. Trained with Adam (*learning rate 0.001, batch size 512*) and a weighted loss that counts each fraud case **~60×** more, to offset the class imbalance.
+
+**Results.**
+
+| Model | Validation PR-AUC |
+|---|---|
+| Random guessing | 0.016 |
+| LightGBM baseline | 0.021 |
+| GRU | 0.024 |
+
+- **Training longer didn't help:** PR-AUC rose for the first 5 one full pass through the training data, then stabilized around **0.023–0.024** through 15 passes.
+- **The improvement is consistent:** across 4 random seeds, the GRU scored **0.0238–0.0240**, beating the baseline every time.
+- **Both models stay close to random.** The sequence model extracts a little more signal, but fraud in this dataset leaves only a small trace in user behavior.
+
+---
