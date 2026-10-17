@@ -20,7 +20,7 @@ Each row is one transaction: user, timestamp, amount, merchant category, country
 
 --- 
 
-### Key findings (see `notebooks/01_eda.ipynb`)
+### Key findings (`notebooks/eda.ipynb`)
 
 - **Heavily imbalanced:** only 1.64% of transactions are fraud. A model that always predicts "not fraud" is 98.4% accurate, so models are evaluated with PR-AUC instead of accuracy.
 - **Clean data:** no missing values; all columns are numeric.
@@ -51,7 +51,7 @@ jupyter lab
 
 ---
 
-## Baseline: LightGBM with behavioral features
+## Baseline: LightGBM with behavioral features s (`notebooks/baseline.ipynb`) 
 
 **Goal:** set a score for the sequence model to beat, using a standard model on features.
 
