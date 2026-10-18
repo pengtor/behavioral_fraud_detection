@@ -1,1 +1,7 @@
-//i
+data/
+.venv/
+__pycache__/
+.ipynb_checkpoints/
+kaggle.json
+result
+.direnv/
