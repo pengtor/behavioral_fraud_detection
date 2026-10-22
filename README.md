@@ -53,10 +53,17 @@ Labeled rows were split 80/20 (stratified) for validation.
 | Random guessing        | ~            | 0.016             |
 | LightGBM (default)     | 0.30         | 0.019             |
 | LightGBM (regularized) | 0.075        | 0.021             |
+| LSTM | 0.024 | ~ |
 
 **What went wrong, and why.** The baseline barely beats random. The features do not separate the classes: average values for fraud and non-fraud are nearly identical, and new devices are a bit *rarer* in fraud. The only signal found was in the extremes, where the top 1% of spending spikes is ***2.5×** more likely to be fraud*. The default model overfit **(0.30 vs 0.019)**; regularizing closed the gap without improving validation, which points toward weak features rather than bad settings.
 
 **The open question:** The dataset says fraud depends on patterns *across* transactions. Single-row features may be too blunt to capture that. A sequence model sees the full ordered history, which is the next thing to test.
+
+*The sequence models win, by a small but consistent margin.* Across four random seeds, the GRU scored **0.0238–0.0240**, beating the baseline each time. Among the **1%** of transactions each model found most suspicious, **6.0%** were fraud for the GRU vs. **4.4%** for LightGBM.
+
+*GRU vs. LSTM:* An LSTM (`notebooks/lstm.ipynb`) trained with identical settings scored **0.0237–0.0244** across the same four seeds, overlapping the GRU's range. With short 20-step sequences, the LSTM's extra memory did not help, so the simpler and more consistent GRU stays the main model.
+
+*However, all models remain close to random.* Even the GRU's top picks are mostly false alarms. Combined with the EDA (fraud and normal transactions have nearly identical feature averages), this tells us that the fraud labels in this dataset carry only a weak behavioral signal.
 
 ---
 
