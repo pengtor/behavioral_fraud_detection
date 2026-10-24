@@ -9,7 +9,7 @@ Detecting fraudulent transactions by modeling each user's transaction history, c
 Data comes from the Kaggle competition:
 [Behavioral Fraud Detection](https://www.kaggle.com/competitions/behavioral-fraud-detection).
 
-The dataset is synthetic: each simulated user has a home country, typical spending range, preferred merchant category, and known devices. Fraud labels are assigned based on deviations from a user's own history (spending spikes, unfamiliar locations, new devices, unusual merchants, bursty timing) rather than any single attribute, which makes it well suited to sequence modeling.
+The dataset is synthetic: each simulated user has a home country, typical spending range, preferred merchant category, and known devices. Fraud labels are assigned based on deviations from a user's own history (spending spikes, unfamiliar locations, new devices, unusual merchants, bursty timing) rather than any single attribute.
 
 | File      | Rows    | Notes                         |
 |-----------|---------|-------------------------------|
